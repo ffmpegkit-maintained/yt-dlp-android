@@ -12,6 +12,7 @@ An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to And
 
 [![](https://jitpack.io/v/ffmpegkit-maintained/yt-dlp-android.svg)](https://jitpack.io/#ffmpegkit-maintained/yt-dlp-android)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Build](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml/badge.svg)](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml)
 
 ---
 
@@ -21,6 +22,8 @@ An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to And
 ```groovy
 dependencyResolutionManagement {
     repositories {
+        google()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }
@@ -39,7 +42,11 @@ dependencies {
 
 ### Initialize (once, in Application or Activity)
 ```java
-YtDlp.init(context);
+try {
+    YtDlp.init(context);
+} catch (YtDlpException e) {
+    Log.e("YtDlp", "Init failed", e);
+}
 ```
 
 ### Download a video
@@ -59,7 +66,7 @@ YtDlp.executeAsync(request, (progress, eta, line) -> {
 ```java
 // Pass a Netscape-format cookies file exported from any browser session
 YtDlpRequest request = new YtDlpRequest("https://example.com/video/...")
-        .addOption("--cookies", "/path/to/cookies.txt")
+        .addOption("--cookies", cookiesFilePath)
         .setOutputTemplate(output);
 
 YtDlp.executeAsync(request, callback);
@@ -73,15 +80,37 @@ YtDlp.updateYtDlp(context, new YtDlp.UpdateCallback() {
 });
 ```
 
+> **Full documentation & tutorials → [GitHub Wiki](https://github.com/ffmpegkit-maintained/yt-dlp-android/wiki)**
+
 ---
 
 ## Pro version (curl-cffi)
 
-The Pro version bundles `curl-cffi` compiled natively for Android (`arm64-v8a`, `armeabi-v7a`, `x86_64`), enabling yt-dlp's full impersonation support for sites that use TLS fingerprinting.
+The Pro version bundles `curl-cffi` compiled natively for Android (`arm64-v8a`), enabling yt-dlp's full impersonation support for sites that use TLS fingerprinting.
 
 **Drop-in replacement — same API, no extra configuration.**
 
-→ Available on [Gumroad](https://gumroad.com) · $9 one-time · includes Maven access + updates for 1 year
+```java
+// Replace YtDlp.init() with YtDlpCurl.init() — everything else is identical
+YtDlpCurl.init(context);
+```
+
+→ Available on [Gumroad](https://gumroad.com) · $9 one-time · includes Maven access + updates
+
+**Pro integration:**
+```groovy
+// settings.gradle
+maven {
+    url 'https://maven.pkg.github.com/ffmpegkit-maintained/yt-dlp-android-curl'
+    credentials {
+        username = "YOUR_GITHUB_USERNAME"
+        password = "YOUR_ACCESS_TOKEN" // provided after purchase
+    }
+}
+
+// build.gradle
+implementation 'com.lucquebec:yt-dlp-android-curl:1.0.0'
+```
 
 ---
 
