@@ -2,3 +2,8 @@ plugins {
     id 'com.android.application' version '8.7.3' apply false
     id 'com.android.library'    version '8.7.3' apply false
 }
+
+// Délègue la commande par défaut de JitPack au sous-module library.
+tasks.register('publishToMavenLocal') {
+    dependsOn ':library:publishToMavenLocal'
+}
