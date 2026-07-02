@@ -1,13 +1,13 @@
 # yt-dlp-android
 
-An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to Android with a clean Java API — download videos from YouTube, Instagram, TikTok, X/Twitter, Facebook and [1000+ sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to Android with a clean Java API — supports [1000+ sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
 
 > **Solving the impersonation problem**
 > If you've hit this error on Android:
 > ```
 > The extractor is attempting impersonation, but no impersonate target is available.
 > ```
-> The free version of this library provides a cookie-based workaround for Instagram.
+> The free version provides a cookie-based workaround.
 > The **[Pro version](#pro-version-curl-cffi)** bundles `curl-cffi` compiled for Android, enabling full native impersonation — no cookies required.
 
 [![](https://jitpack.io/v/LucQuebec/yt-dlp-android.svg)](https://jitpack.io/#LucQuebec/yt-dlp-android)
@@ -46,7 +46,7 @@ YtDlp.init(context);
 ```java
 String output = getExternalFilesDir(null) + "/%(title)s.%(ext)s";
 
-YtDlpRequest request = new YtDlpRequest("https://www.youtube.com/watch?v=...")
+YtDlpRequest request = new YtDlpRequest("https://example.com/video/...")
         .setOutputTemplate(output)
         .addOption("-f", "best[height<=720]");
 
@@ -55,13 +55,11 @@ YtDlp.executeAsync(request, (progress, eta, line) -> {
 });
 ```
 
-### Instagram (with cookies)
+### Sites requiring authentication (with cookies)
 ```java
-// Build a cookies file from CookieManager (user must be logged in via WebView)
-File cookiesFile = InstagramCookieHelper.buildCookieFile(context);
-
-YtDlpRequest request = new YtDlpRequest("https://www.instagram.com/reel/...")
-        .addOption("--cookies", cookiesFile.getAbsolutePath())
+// Pass a Netscape-format cookies file exported from any browser session
+YtDlpRequest request = new YtDlpRequest("https://example.com/video/...")
+        .addOption("--cookies", "/path/to/cookies.txt")
         .setOutputTemplate(output);
 
 YtDlp.executeAsync(request, callback);
@@ -79,9 +77,9 @@ YtDlp.updateYtDlp(context, new YtDlp.UpdateCallback() {
 
 ## Pro version (curl-cffi)
 
-The Pro version bundles `curl-cffi` compiled natively for Android (`arm64-v8a`, `armeabi-v7a`, `x86_64`), enabling yt-dlp's full impersonation support — required by Instagram, TikTok, and other platforms that use TLS fingerprinting.
+The Pro version bundles `curl-cffi` compiled natively for Android (`arm64-v8a`, `armeabi-v7a`, `x86_64`), enabling yt-dlp's full impersonation support for sites that use TLS fingerprinting.
 
-**No cookies needed. Drop-in replacement — same API.**
+**Drop-in replacement — same API, no extra configuration.**
 
 → Available on [Gumroad](https://gumroad.com) · $9 one-time · includes Maven access + updates for 1 year
 
