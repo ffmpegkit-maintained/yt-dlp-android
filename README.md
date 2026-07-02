@@ -95,7 +95,7 @@ The Pro version bundles `curl-cffi` compiled natively for Android (`arm64-v8a`),
 YtDlpCurl.init(context);
 ```
 
-→ Available on [Gumroad](https://gumroad.com) · $9 one-time · includes Maven access + updates
+→ Available on [Gumroad](https://ffmpegkit.gumroad.com/l/fsxef) · $9 one-time · includes Maven access + updates
 
 **Pro integration:**
 ```groovy
@@ -109,7 +109,7 @@ maven {
 }
 
 // build.gradle
-implementation 'com.lucquebec:yt-dlp-android-curl:1.0.0'
+implementation 'com.lucquebec:yt-dlp-android-curl:2.0.0'
 ```
 
 ---
