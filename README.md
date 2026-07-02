@@ -10,7 +10,7 @@ An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to And
 > The free version provides a cookie-based workaround.
 > The **[Pro version](#pro-version-curl-cffi)** bundles `curl-cffi` compiled for Android, enabling full native impersonation — no cookies required.
 
-[![](https://jitpack.io/v/LucQuebec/yt-dlp-android.svg)](https://jitpack.io/#LucQuebec/yt-dlp-android)
+[![](https://jitpack.io/v/ffmpegkit-maintained/yt-dlp-android.svg)](https://jitpack.io/#ffmpegkit-maintained/yt-dlp-android)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -29,7 +29,7 @@ dependencyResolutionManagement {
 **Step 2** — Add the dependency:
 ```groovy
 dependencies {
-    implementation 'com.github.LucQuebec:yt-dlp-android:1.0.0'
+    implementation 'com.github.ffmpegkit-maintained:yt-dlp-android:1.0.0'
 }
 ```
 

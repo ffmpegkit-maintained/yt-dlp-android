@@ -28,4 +28,5 @@ android {
 
 dependencies {
     api 'com.github.yausername:youtubedl-android:latest.release'
+    // JitPack coordinates: com.github.ffmpegkit-maintained:yt-dlp-android:<version>
 }
