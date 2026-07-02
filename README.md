@@ -85,6 +85,16 @@ The Pro version bundles `curl-cffi` compiled natively for Android (`arm64-v8a`, 
 
 ---
 
+## From the same maintainer
+
+> **Need to process, encode or transcribe the videos you download?**
+>
+> [**ffmpeg-kit (maintained fork)**](https://github.com/ffmpegkit-maintained/ffmpeg-kit) — the community-maintained continuation of FFmpegKit (archived April 2025). Same API, updated for Android SDK 35 and 16 KB page sizes. Includes an optional **WhisperKit** tier for on-device speech recognition and SRT subtitle generation — no server required.
+>
+> The natural companion to yt-dlp-android: download with this library, process with ffmpeg-kit.
+
+---
+
 ## Requirements
 
 - Android 7.0+ (API 24)
