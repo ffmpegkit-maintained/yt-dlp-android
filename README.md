@@ -2,17 +2,25 @@
 
 An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to Android with a clean Java API — supports [1000+ sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
 
-> **Solving the impersonation problem**
-> If you've hit this error on Android:
-> ```
-> The extractor is attempting impersonation, but no impersonate target is available.
-> ```
-> The free version provides a cookie-based workaround.
-> The **[Pro version](#pro-version-curl-cffi)** bundles `curl-cffi` compiled for Android, enabling full native impersonation — no cookies required.
-
 [![](https://jitpack.io/v/ffmpegkit-maintained/yt-dlp-android.svg)](https://jitpack.io/#ffmpegkit-maintained/yt-dlp-android)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Build](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml/badge.svg)](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml)
+
+## Free vs Pro
+
+| | Free (`yt-dlp-android`) | Pro (`yt-dlp-android-curl`) |
+|---|:---:|:---:|
+| yt-dlp (1000+ sites) | ✓ | ✓ |
+| Java API (`YtDlp`) | ✓ | ✓ |
+| Cookie-based auth workaround | ✓ | ✓ |
+| **curl-cffi — native TLS impersonation** | **—** | **✓** |
+| Distribution | JitPack (public) | GitHub Packages (token required) |
+| Price | Free | $14 / $36 team |
+
+> **What is curl-cffi?**
+> Some sites block standard HTTP clients by analyzing the TLS fingerprint of the request. `curl-cffi` reproduces the exact fingerprint of a real browser (Chrome, Firefox…), bypassing this protection without needing cookies or login.
+> This feature is **exclusive to the Pro version** (`yt-dlp-android-curl`).
+> The free version uses a cookie-based workaround instead — see [Cookie Authentication](https://github.com/ffmpegkit-maintained/yt-dlp-android/wiki/Cookie-Authentication).
 
 ---
 
@@ -84,11 +92,11 @@ YtDlp.updateYtDlp(context, new YtDlp.UpdateCallback() {
 
 ---
 
-## Pro version (curl-cffi)
+## Pro version — curl-cffi (native TLS impersonation)
 
-The Pro version bundles `curl-cffi` compiled natively for Android (`arm64-v8a`), enabling yt-dlp's full impersonation support for sites that use TLS fingerprinting.
+`curl-cffi` is **not included in the free version**. It is exclusively available in `yt-dlp-android-curl`, the paid Pro library.
 
-**Drop-in replacement — same API, no extra configuration.**
+Drop-in replacement — same API, no extra configuration:
 
 ```java
 // Replace YtDlp.init() with YtDlpCurl.init() — everything else is identical
