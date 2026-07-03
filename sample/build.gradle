@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.lucquebec.ytdlpsample'
+    namespace 'dev.ffmpegkit_maintained.ytdlpsample'
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.lucquebec.ytdlpsample"
+        applicationId "dev.ffmpegkit_maintained.ytdlpsample"
         minSdk 24
         targetSdk 35
         versionCode 1

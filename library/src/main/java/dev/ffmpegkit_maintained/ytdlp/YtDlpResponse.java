@@ -1,4 +1,4 @@
-package com.lucquebec.ytdlp;
+package dev.ffmpegkit_maintained.ytdlp;
 
 public class YtDlpResponse {
 

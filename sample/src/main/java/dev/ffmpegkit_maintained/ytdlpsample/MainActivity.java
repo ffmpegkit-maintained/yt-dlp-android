@@ -1,14 +1,14 @@
-package com.lucquebec.ytdlpsample;
+package dev.ffmpegkit_maintained.ytdlpsample;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 
-import com.lucquebec.ytdlp.DownloadProgressCallback;
-import com.lucquebec.ytdlp.YtDlp;
-import com.lucquebec.ytdlp.YtDlpException;
-import com.lucquebec.ytdlp.YtDlpRequest;
-import com.lucquebec.ytdlp.YtDlpResponse;
+import dev.ffmpegkit_maintained.ytdlp.DownloadProgressCallback;
+import dev.ffmpegkit_maintained.ytdlp.YtDlp;
+import dev.ffmpegkit_maintained.ytdlp.YtDlpException;
+import dev.ffmpegkit_maintained.ytdlp.YtDlpRequest;
+import dev.ffmpegkit_maintained.ytdlp.YtDlpResponse;
 
 public class MainActivity extends Activity {
 

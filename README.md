@@ -109,7 +109,7 @@ maven {
 }
 
 // build.gradle
-implementation 'com.lucquebec:yt-dlp-android-curl:2.0.0'
+implementation 'dev.ffmpegkit_maintained:yt-dlp-android-curl:VERSION'  // version provided after purchase
 ```
 
 ---

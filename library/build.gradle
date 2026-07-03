@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.lucquebec.ytdlp'
+    namespace 'dev.ffmpegkit_maintained.ytdlp'
     compileSdk 35
 
     defaultConfig {
