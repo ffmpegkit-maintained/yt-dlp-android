@@ -26,8 +26,19 @@ An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to And
 
 ## Installation (free version)
 
-**Step 1** — Add JitPack to your `settings.gradle`:
+### Option A — Maven Central (recommended)
+
 ```groovy
+// build.gradle — no extra repository needed
+dependencies {
+    implementation 'dev.ffmpegkit-maintained:yt-dlp-android:2.0.2'
+}
+```
+
+### Option B — JitPack
+
+```groovy
+// settings.gradle
 dependencyResolutionManagement {
     repositories {
         google()
@@ -35,12 +46,10 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-```
 
-**Step 2** — Add the dependency:
-```groovy
+// build.gradle
 dependencies {
-    implementation 'com.github.ffmpegkit-maintained:yt-dlp-android:2.0.2'
+    implementation 'dev.ffmpegkit-maintained:yt-dlp-android:2.0.2'
 }
 ```
 

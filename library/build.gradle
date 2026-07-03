@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'com.chaquo.python'
-    id 'maven-publish'
+    id 'com.vanniktech.maven.publish'
 }
 
 android {
@@ -49,22 +49,40 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-        }
-    }
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId    GROUP
-            artifactId ARTIFACT
-            version    VERSION
-            afterEvaluate {
-                from components.release
+mavenPublishing {
+    coordinates("dev.ffmpegkit-maintained", "yt-dlp-android", VERSION)
+
+    signAllPublications()
+    publishToMavenCentral(true)
+
+    pom {
+        name = "yt-dlp-android"
+        description = "Android library embedding yt-dlp via Python 3.13 (Chaquopy). 1000+ supported sites. Clean Java API. Pro version adds curl-cffi for TLS impersonation (Instagram, TikTok, YouTube)."
+        inceptionYear = "2026"
+        url = "https://github.com/ffmpegkit-maintained/yt-dlp-android"
+
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://github.com/ffmpegkit-maintained/yt-dlp-android/blob/main/LICENSE"
+                distribution = "repo"
             }
+        }
+
+        developers {
+            developer {
+                id = "ffmpegkit-maintained"
+                name = "ffmpegkit-maintained"
+                url = "https://github.com/ffmpegkit-maintained"
+            }
+        }
+
+        scm {
+            url = "https://github.com/ffmpegkit-maintained/yt-dlp-android"
+            connection = "scm:git:git://github.com/ffmpegkit-maintained/yt-dlp-android.git"
+            developerConnection = "scm:git:ssh://git@github.com/ffmpegkit-maintained/yt-dlp-android.git"
         }
     }
 }
