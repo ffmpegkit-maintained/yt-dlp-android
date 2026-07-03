@@ -40,7 +40,7 @@ dependencyResolutionManagement {
 **Step 2** — Add the dependency:
 ```groovy
 dependencies {
-    implementation 'com.github.ffmpegkit-maintained:yt-dlp-android:2.0.0'
+    implementation 'com.github.ffmpegkit-maintained:yt-dlp-android:2.0.1'
 }
 ```
 
