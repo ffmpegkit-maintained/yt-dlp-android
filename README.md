@@ -40,7 +40,7 @@ dependencyResolutionManagement {
 **Step 2** — Add the dependency:
 ```groovy
 dependencies {
-    implementation 'com.github.ffmpegkit-maintained:yt-dlp-android:1.0.1'
+    implementation 'com.github.ffmpegkit-maintained:yt-dlp-android:2.0.0'
 }
 ```
 
@@ -80,13 +80,10 @@ YtDlpRequest request = new YtDlpRequest("https://example.com/video/...")
 YtDlp.executeAsync(request, callback);
 ```
 
-### Update yt-dlp binary
-```java
-YtDlp.updateYtDlp(context, new YtDlp.UpdateCallback() {
-    public void onComplete(String status) { Log.d("YtDlp", "Updated: " + status); }
-    public void onError(String error)    { Log.e("YtDlp", "Update failed: " + error); }
-});
-```
+### Update yt-dlp
+
+In-app updates are not supported — yt-dlp is bundled inside the AAR via Chaquopy.
+To get the latest yt-dlp, update the library version in your `build.gradle`.
 
 > **Full documentation & tutorials → [GitHub Wiki](https://github.com/ffmpegkit-maintained/yt-dlp-android/wiki)**
 
@@ -135,7 +132,14 @@ implementation 'dev.ffmpegkit_maintained:yt-dlp-android-curl:VERSION'  // versio
 ## Requirements
 
 - Android 7.0+ (API 24)
+- ABI: arm64-v8a or x86_64
 - `INTERNET` permission
+
+## What changed in v2.0.0
+
+v2.0.0 replaces the `youtubedl-android` dependency with [Chaquopy](https://chaquo.com/chaquopy/) (Python 3.13 embedded). This makes the free and Pro versions share the same architecture and API — upgrading to Pro is a one-line change.
+
+The Java API is compatible: `YtDlp.init()`, `YtDlpRequest`, `YtDlpResponse`, `DownloadProgressCallback` all work the same. The only removed feature is in-app yt-dlp updates (use a new library release instead).
 
 ## License
 

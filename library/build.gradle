@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'com.chaquo.python'
     id 'maven-publish'
 }
 
@@ -7,12 +8,31 @@ android {
     namespace 'dev.ffmpegkit_maintained.ytdlp'
     compileSdk 35
 
+    base {
+        archivesName = 'yt-dlp-android'
+    }
+
     defaultConfig {
         minSdk 24
         targetSdk 35
-        versionCode 1
-        versionName "1.0.1"
-        consumerProguardFiles "consumer-rules.pro"
+        versionCode 2
+        versionName VERSION
+
+        ndk {
+            abiFilters 'arm64-v8a', 'x86_64'
+        }
+
+        python {
+            // Local Windows dev machine : pointer vers Python 3.13 explicite.
+            // CI Linux : la step setup-python expose déjà python3.13 dans le PATH.
+            def localPython = new File("D:/Python313/python.exe")
+            if (localPython.exists()) { buildPython localPython.absolutePath }
+            version "3.13"
+            pip {
+                install "yt-dlp"
+                install "certifi"
+            }
+        }
     }
 
     buildTypes {
@@ -33,23 +53,15 @@ android {
     }
 }
 
-// Publication déclarée hors afterEvaluate → tâche publishToMavenLocal enregistrée
-// dès la configuration. Seul 'from components.release' est différé car AGP crée
-// le composant release pendant l'évaluation du projet.
 publishing {
     publications {
         release(MavenPublication) {
-            groupId    'com.github.ffmpegkit-maintained'
-            artifactId 'yt-dlp-android'
-            version    '1.0.1'
+            groupId    GROUP
+            artifactId ARTIFACT
+            version    VERSION
             afterEvaluate {
                 from components.release
             }
         }
     }
-}
-
-dependencies {
-    api 'com.github.yausername:youtubedl-android:latest.release'
-    // JitPack coordinates: com.github.ffmpegkit-maintained:yt-dlp-android:<version>
 }

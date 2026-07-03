@@ -2,38 +2,32 @@ package dev.ffmpegkit_maintained.ytdlp;
 
 import android.content.Context;
 
-import com.yausername.youtubedl_android.YoutubeDL;
-import com.yausername.youtubedl_android.YoutubeDLRequest;
+import com.chaquo.python.PyException;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-/**
- * Main entry point for yt-dlp-android.
- *
- * Usage:
- *   YtDlp.init(context);
- *   YtDlpRequest req = new YtDlpRequest("https://...")
- *       .setOutputTemplate("/path/to/output.mp4");
- *   YtDlpResponse resp = YtDlp.execute(req, callback);
- */
 public class YtDlp {
 
-    private static final ExecutorService executor = Executors.newCachedThreadPool();
-    private static boolean initialized = false;
+    static final ExecutorService executor = Executors.newCachedThreadPool();
+    private static volatile boolean initialized = false;
 
     private YtDlp() {}
 
     public static synchronized void init(Context context) throws YtDlpException {
         if (initialized) return;
         try {
-            YoutubeDL.getInstance().init(context);
+            if (!Python.isStarted()) {
+                Python.start(new AndroidPlatform(context));
+            }
             initialized = true;
         } catch (Exception e) {
-            throw new YtDlpException("Failed to initialize yt-dlp", e);
+            throw new YtDlpException("Failed to initialize Python runtime", e);
         }
     }
 
@@ -42,12 +36,17 @@ public class YtDlp {
             throws YtDlpException {
         ensureInitialized();
         try {
-            YoutubeDLRequest inner = buildInnerRequest(request);
-            com.yausername.youtubedl_android.YoutubeDLResponse raw =
-                    YoutubeDL.getInstance().execute(inner, (progress, eta, line) -> {
-                        if (callback != null) callback.onProgressUpdate(progress, eta, line);
-                    });
-            return new YtDlpResponse(raw.getExitCode(), raw.getOut(), raw.getErr());
+            PyObject runner = Python.getInstance().getModule("ytdlp_runner");
+            int exitCode = runner
+                    .callAttr("execute",
+                            request.getUrl(),
+                            request.getOutputTemplate(),
+                            request.getOptions().toArray(new String[0]),
+                            callback)
+                    .toJava(Integer.class);
+            return new YtDlpResponse(exitCode, "", "");
+        } catch (PyException e) {
+            throw new YtDlpException(e.getMessage(), e);
         } catch (Exception e) {
             throw new YtDlpException(e.getMessage(), e);
         }
@@ -58,41 +57,41 @@ public class YtDlp {
         return executor.submit((Callable<YtDlpResponse>) () -> execute(request, callback));
     }
 
-    public static void updateYtDlp(Context context, YtDlp.UpdateCallback callback) {
-        executor.execute(() -> {
+    public static Future<YtDlpResponse> executeDebug(YtDlpRequest request,
+                                                     LogCallback logCallback,
+                                                     DownloadProgressCallback progressCallback) {
+        return executor.submit((Callable<YtDlpResponse>) () -> {
+            ensureInitialized();
             try {
-                YoutubeDL.UpdateStatus status =
-                        YoutubeDL.getInstance().updateYoutubeDL(context);
-                if (callback != null) callback.onComplete(status.toString());
-            } catch (Exception e) {
-                if (callback != null) callback.onError(e.getMessage());
+                PyObject runner = Python.getInstance().getModule("ytdlp_runner");
+                int exitCode = runner
+                        .callAttr("execute_debug",
+                                request.getUrl(),
+                                request.getOutputTemplate(),
+                                request.getOptions().toArray(new String[0]),
+                                logCallback,
+                                progressCallback)
+                        .toJava(Integer.class);
+                return new YtDlpResponse(exitCode, "", "");
+            } catch (PyException e) {
+                throw new YtDlpException(e.getMessage(), e);
             }
         });
     }
 
-    private static YoutubeDLRequest buildInnerRequest(YtDlpRequest request) {
-        YoutubeDLRequest inner = new YoutubeDLRequest(request.getUrl());
-        if (request.getOutputTemplate() != null) {
-            inner.addOption("-o", request.getOutputTemplate());
-        }
-        List<String> opts = request.getOptions();
-        int i = 0;
-        while (i < opts.size()) {
-            String key = opts.get(i);
-            if (i + 1 < opts.size() && !opts.get(i + 1).startsWith("-")) {
-                inner.addOption(key, opts.get(i + 1));
-                i += 2;
-            } else {
-                inner.addOption(key);
-                i++;
+    public static void updateYtDlp(Context context, UpdateCallback callback) {
+        executor.execute(() -> {
+            if (callback != null) {
+                callback.onError("In-app yt-dlp update not supported. " +
+                        "Update the yt-dlp-android dependency to get the latest yt-dlp.");
             }
-        }
-        return inner;
+        });
     }
 
     private static void ensureInitialized() throws YtDlpException {
         if (!initialized) {
-            throw new YtDlpException("YtDlp not initialized. Call YtDlp.init(context) first.");
+            throw new YtDlpException(
+                    "YtDlp not initialized. Call YtDlp.init(context) first.");
         }
     }
 
