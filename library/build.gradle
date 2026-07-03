@@ -23,10 +23,13 @@ android {
         }
 
         python {
-            // Local Windows dev machine : pointer vers Python 3.13 explicite.
-            // CI Linux : la step setup-python expose déjà python3.13 dans le PATH.
-            def localPython = new File("D:/Python313/python.exe")
-            if (localPython.exists()) { buildPython localPython.absolutePath }
+            // Windows dev : Python 3.13 local explicite.
+            // JitPack : python-build-standalone extrait dans $HOME/python/bin.
+            // GitHub Actions CI : setup-python expose python3.13 dans le PATH.
+            def localPython   = new File("D:/Python313/python.exe")
+            def jitpackPython = new File("${System.getProperty('user.home')}/python/bin/python3.13")
+            if      (localPython.exists())   { buildPython localPython.absolutePath }
+            else if (jitpackPython.exists()) { buildPython jitpackPython.absolutePath }
             version "3.13"
             pip {
                 install "yt-dlp"

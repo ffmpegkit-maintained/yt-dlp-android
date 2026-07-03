@@ -1,9 +1,6 @@
 jdk:
   - openjdk17
 before_install:
-  - add-apt-repository ppa:deadsnakes/ppa -y
-  - apt-get update -q
-  - apt-get install -y python3.13 python3.13-dev
   - chmod +x gradlew
 install:
-  - ./gradlew :library:publishToMavenLocal --no-daemon -x test
+  - curl -fsSL "https://github.com/indygreg/python-build-standalone/releases/download/20250317/cpython-3.13.2+20250317-x86_64-unknown-linux-gnu-install_only.tar.gz" -o /tmp/py313.tar.gz && tar -xzf /tmp/py313.tar.gz -C "$HOME" && export PATH="$HOME/python/bin:$PATH" && ./gradlew :library:publishToMavenLocal --no-daemon -x test
