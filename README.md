@@ -95,7 +95,7 @@ The Pro version bundles `curl-cffi` compiled natively for Android (`arm64-v8a`),
 YtDlpCurl.init(context);
 ```
 
-→ Available on [Gumroad](https://ffmpegkit.gumroad.com/l/fsxef) · $9 one-time · includes Maven access + updates
+→ Available on [Gumroad](https://ffmpegkit.gumroad.com/l/fsxef) · $14 individual / $36 team (5 devs) · includes Maven access + updates
 
 **Pro integration:**
 ```groovy
