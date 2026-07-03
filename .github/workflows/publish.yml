@@ -6,6 +6,9 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,13 +39,47 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: yt-dlp-android-${{ github.ref_name }}
-          path: library/build/outputs/aar/library-release.aar
+          path: library/build/outputs/aar/yt-dlp-android-release.aar
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: library/build/outputs/aar/library-release.aar
-          generate_release_notes: true
+          files: library/build/outputs/aar/yt-dlp-android-release.aar
+          body: |
+            ## yt-dlp-android ${{ github.ref_name }} — Free version
+
+            Android library that runs [yt-dlp](https://github.com/yt-dlp/yt-dlp) natively on Android via Chaquopy (Python 3.13 embedded). Supports 1000+ sites.
+
+            > **⚠️ This is the free version — curl-cffi is NOT included.**
+            > For TLS fingerprint impersonation (bypassing bot detection on YouTube, Instagram, etc.), the **Pro version** (`yt-dlp-android-curl`) is required.
+            > → Available at [ffmpegkit.gumroad.com](https://ffmpegkit.gumroad.com/l/fsxef) · $14 individual / $36 team
+
+            ### What's in this version
+            - yt-dlp (latest) + Python 3.13 embedded via Chaquopy
+            - Clean Java API: `YtDlp.init()`, `YtDlpRequest`, `YtDlpResponse`, `DownloadProgressCallback`
+            - Cookie-based auth support (`--cookies`)
+            - ABI: `arm64-v8a`, `x86_64`
+            - **No curl-cffi** — standard HTTP only
+
+            ### Free vs Pro
+            | | Free (this) | Pro (`yt-dlp-android-curl`) |
+            |---|:---:|:---:|
+            | yt-dlp (1000+ sites) | ✓ | ✓ |
+            | Python 3.13 embedded | ✓ | ✓ |
+            | Cookie auth | ✓ | ✓ |
+            | **curl-cffi — TLS impersonation** | **—** | **✓** |
+            | ABI | arm64-v8a, x86_64 | arm64-v8a |
+            | Distribution | JitPack (public) | GitHub Packages (token) |
+            | Price | Free | $14 / $36 team |
+
+            ### Installation
+            ```groovy
+            // settings.gradle
+            maven { url 'https://jitpack.io' }
+
+            // build.gradle
+            implementation 'com.github.ffmpegkit-maintained:yt-dlp-android:${{ github.ref_name }}'
+            ```
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
