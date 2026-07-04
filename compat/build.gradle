@@ -1,5 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
-
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
@@ -33,7 +31,7 @@ mavenPublishing {
     coordinates("dev.ffmpegkit-maintained", "yt-dlp-android-compat", VERSION)
 
     signAllPublications()
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
 
     pom {
         name = "yt-dlp-android-compat"
