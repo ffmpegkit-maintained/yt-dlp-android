@@ -7,7 +7,7 @@ mavenPublishing {
     coordinates("dev.ffmpegkit-maintained", "ytdlp", VERSION)
 
     signAllPublications()
-    publishToMavenCentral(true)
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
 
     pom {
         name = "ytdlp for Android — yt-dlp"

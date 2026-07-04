@@ -55,7 +55,9 @@ Your app
 | ABI | arm64-v8a + x86_64 | arm64-v8a |
 | curl-cffi — TLS fingerprint impersonation | — | ✓ |
 | Distribution | Maven Central / JitPack (public) | GitHub Packages (token after purchase) |
-| Price | Free / MIT | $14 individual · $36 team (5 devs) |
+| Price | Free / MIT | $24 individual · $62 team (5 devs) — use code **JOKOBEE10** for $10 off |
+
+> 🎉 **Launch promotion** — use code `JOKOBEE10` at checkout for $10 off (Individual: $24→$14 · Team: $62→$52).
 
 ---
 

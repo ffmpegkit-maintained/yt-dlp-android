@@ -7,7 +7,7 @@ mavenPublishing {
     coordinates("dev.ffmpegkit-maintained", "youtubedl", VERSION)
 
     signAllPublications()
-    publishToMavenCentral(true)
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
 
     pom {
         name = "youtubedl for Android — yt-dlp"
