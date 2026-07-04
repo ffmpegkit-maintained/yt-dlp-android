@@ -6,6 +6,7 @@ An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to And
 [![](https://jitpack.io/v/ffmpegkit-maintained/yt-dlp-android.svg)](https://jitpack.io/#ffmpegkit-maintained/yt-dlp-android)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Build](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml/badge.svg)](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml)
+[![Website](https://img.shields.io/badge/website-jokobee.com-blue.svg)](https://www.jokobee.com/ytdlp)
 
 ## Free vs Pro
 
@@ -114,7 +115,7 @@ Drop-in replacement — same API, no extra configuration:
 YtDlpCurl.init(context);
 ```
 
-→ Available on [Gumroad](https://ffmpegkit.gumroad.com/l/fsxef) · $24 individual / $62 team (5 devs) · includes Maven access + updates
+→ Available on [Jokobee](https://www.jokobee.com/ytdlp) · $24 individual / $62 team (5 devs) · includes Maven access + updates
 
 **Pro integration:**
 ```groovy

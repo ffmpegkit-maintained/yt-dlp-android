@@ -57,7 +57,7 @@ jobs:
 
             > **⚠️ This is the free version — curl-cffi is NOT included.**
             > For TLS fingerprint impersonation (bypassing bot detection on YouTube, Instagram, etc.), the **Pro version** (`yt-dlp-android-curl`) is required.
-            > → Available at [ffmpegkit.gumroad.com](https://ffmpegkit.gumroad.com/l/fsxef) · $14 individual / $36 team
+            > → Available at [jokobee.com/ytdlp](https://www.jokobee.com/ytdlp) · $24 individual / $62 team
 
             ### What's in this version
             - yt-dlp (latest) + Python 3.13 embedded via Chaquopy
