@@ -30,6 +30,7 @@ android {
             def jitpackPython = new File("${System.getProperty('user.home')}/python/bin/python3.13")
             if      (localPython.exists())   { buildPython localPython.absolutePath }
             else if (jitpackPython.exists()) { buildPython jitpackPython.absolutePath }
+            else                             { buildPython "python3.13" }
             version "3.13"
             pip {
                 install "yt-dlp"
