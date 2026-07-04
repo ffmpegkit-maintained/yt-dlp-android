@@ -2,6 +2,7 @@
 
 An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to Android with a clean Java API — supports [1000+ sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
 
+[![Maven Central](https://img.shields.io/maven-central/v/dev.ffmpegkit-maintained/yt-dlp-android)](https://central.sonatype.com/artifact/dev.ffmpegkit-maintained/yt-dlp-android)
 [![](https://jitpack.io/v/ffmpegkit-maintained/yt-dlp-android.svg)](https://jitpack.io/#ffmpegkit-maintained/yt-dlp-android)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Build](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml/badge.svg)](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml)
@@ -15,7 +16,7 @@ An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to And
 | Cookie-based auth workaround | ✓ | ✓ |
 | **curl-cffi — TLS fingerprint impersonation** | **—** | **✓** |
 | Distribution | JitPack (public) | GitHub Packages (token required) |
-| Price | Free | $14 / $36 team |
+| Price | Free | $24 / $62 team (5 devs) |
 
 > **What is TLS fingerprint impersonation?**
 > Some sites block standard HTTP clients by analyzing the TLS fingerprint of the request. `curl-cffi` reproduces the exact fingerprint of a real browser (Chrome, Firefox…), bypassing this protection without needing cookies or login.
@@ -32,6 +33,10 @@ An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to And
 // build.gradle — no extra repository needed
 dependencies {
     implementation 'dev.ffmpegkit-maintained:yt-dlp-android:2.0.2'
+
+    // Optional: migration shim for apps previously using yausername/youtubedl-android
+    // Adds YoutubeDL, YoutubeDLRequest, YoutubeDLResponse typealiases — no code changes needed
+    implementation 'dev.ffmpegkit-maintained:yt-dlp-android-compat:2.0.2'
 }
 ```
 
@@ -109,7 +114,7 @@ Drop-in replacement — same API, no extra configuration:
 YtDlpCurl.init(context);
 ```
 
-→ Available on [Gumroad](https://ffmpegkit.gumroad.com/l/fsxef) · $14 individual / $36 team (5 devs) · includes Maven access + updates
+→ Available on [Gumroad](https://ffmpegkit.gumroad.com/l/fsxef) · $24 individual / $62 team (5 devs) · includes Maven access + updates
 
 **Pro integration:**
 ```groovy
