@@ -53,7 +53,7 @@ jobs:
           body: |
             ## yt-dlp-android ${{ github.ref_name }} — Free version
 
-            Android library that runs [yt-dlp](https://github.com/yt-dlp/yt-dlp) natively on Android via Chaquopy (Python 3.13 embedded). Supports 1000+ sites.
+            Android library that runs [yt-dlp](https://github.com/yt-dlp/yt-dlp) on Android via an embedded Python 3.13 runtime (Chaquopy). Supports 1000+ sites.
 
             > **⚠️ This is the free version — curl-cffi is NOT included.**
             > For TLS fingerprint impersonation (bypassing bot detection on YouTube, Instagram, etc.), the **Pro version** (`yt-dlp-android-curl`) is required.

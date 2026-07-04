@@ -13,11 +13,11 @@ An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to And
 | yt-dlp (1000+ sites) | ✓ | ✓ |
 | Java API (`YtDlp`) | ✓ | ✓ |
 | Cookie-based auth workaround | ✓ | ✓ |
-| **curl-cffi — native TLS impersonation** | **—** | **✓** |
+| **curl-cffi — TLS fingerprint impersonation** | **—** | **✓** |
 | Distribution | JitPack (public) | GitHub Packages (token required) |
 | Price | Free | $14 / $36 team |
 
-> **What is curl-cffi?**
+> **What is TLS fingerprint impersonation?**
 > Some sites block standard HTTP clients by analyzing the TLS fingerprint of the request. `curl-cffi` reproduces the exact fingerprint of a real browser (Chrome, Firefox…), bypassing this protection without needing cookies or login.
 > This feature is **exclusive to the Pro version** (`yt-dlp-android-curl`).
 > The free version uses a cookie-based workaround instead — see [Cookie Authentication](https://github.com/ffmpegkit-maintained/yt-dlp-android/wiki/Cookie-Authentication).
@@ -98,7 +98,7 @@ To get the latest yt-dlp, update the library version in your `build.gradle`.
 
 ---
 
-## Pro version — curl-cffi (native TLS impersonation)
+## Pro version — curl-cffi (TLS fingerprint impersonation)
 
 `curl-cffi` is **not included in the free version**. It is exclusively available in `yt-dlp-android-curl`, the paid Pro library.
 
@@ -143,6 +143,29 @@ implementation 'dev.ffmpegkit_maintained:yt-dlp-android-curl:VERSION'  // versio
 - Android 7.0+ (API 24)
 - ABI: arm64-v8a or x86_64
 - `INTERNET` permission
+
+## Architecture
+
+yt-dlp-android embeds a full **Python 3.13 runtime** inside the AAR via [Chaquopy](https://chaquo.com/chaquopy/). No Python installation is needed on the device — the interpreter runs in-process inside your app.
+
+```
+Your app
+  └─ yt-dlp-android (AAR, ~60–80 MB)
+       ├─ Chaquopy runtime (CPython 3.13 · arm64-v8a + x86_64)
+       ├─ yt-dlp (pure Python, version fixed at library build time)
+       └─ certifi (CA certificates)
+```
+
+`YtDlp.init(context)` starts CPython in-process via Chaquopy's JNI bridge (`libpython3.13.so`). Every download call dispatches into `ytdlp_runner.py`, which calls `yt_dlp.YoutubeDL(opts).download([url])` — pure Python, no subprocess, no native yt-dlp binary.
+
+## Limitations
+
+| Limitation | Details |
+|---|---|
+| **No TLS fingerprint impersonation** | Uses Python's default HTTP stack. Sites that block non-browser TLS fingerprints will return errors. Use the [cookie-based workaround](https://github.com/ffmpegkit-maintained/yt-dlp-android/wiki/Cookie-Authentication) or upgrade to the [Pro version](https://github.com/ffmpegkit-maintained/yt-dlp-android/wiki/Pro-Version). |
+| **AAR size ~60–80 MB** | Includes CPython 3.13 for two ABI slices (arm64-v8a + x86_64) plus yt-dlp bytecode. Use Android App Bundles (AAB) + ABI splits to reduce per-device download size. |
+| **ABI: arm64-v8a + x86_64 only** | 32-bit devices (armeabi-v7a) are not supported. |
+| **yt-dlp not updatable in-app** | Bundled at library build time. Update yt-dlp by bumping the library version in `build.gradle`. |
 
 ## What changed in v2.0.0
 
