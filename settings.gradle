@@ -17,3 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "yt-dlp-android"
 include ':library'
 include ':sample'
+include ':alias-youtubedl'
+include ':alias-ytdlp'
+include ':compat'

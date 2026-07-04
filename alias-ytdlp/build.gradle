@@ -1,0 +1,44 @@
+plugins {
+    id 'java-library'
+    id 'com.vanniktech.maven.publish'
+}
+
+mavenPublishing {
+    coordinates("dev.ffmpegkit-maintained", "ytdlp", VERSION)
+
+    signAllPublications()
+    publishToMavenCentral(true)
+
+    pom {
+        name = "ytdlp for Android — yt-dlp"
+        description = "Maven Central search alias → dev.ffmpegkit-maintained:yt-dlp-android. Searching for 'ytdlp' on Maven Central? 1000+ sites, clean Java/Kotlin API, yt-dlp embedded via Python 3.13. Pro tier adds curl-cffi for TLS impersonation (Instagram, TikTok, YouTube)."
+        inceptionYear = "2026"
+        url = "https://github.com/ffmpegkit-maintained/yt-dlp-android"
+
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://github.com/ffmpegkit-maintained/yt-dlp-android/blob/main/LICENSE"
+                distribution = "repo"
+            }
+        }
+
+        developers {
+            developer {
+                id = "ffmpegkit-maintained"
+                name = "ffmpegkit-maintained"
+                url = "https://github.com/ffmpegkit-maintained"
+            }
+        }
+
+        scm {
+            url = "https://github.com/ffmpegkit-maintained/yt-dlp-android"
+            connection = "scm:git:git://github.com/ffmpegkit-maintained/yt-dlp-android.git"
+            developerConnection = "scm:git:ssh://git@github.com/ffmpegkit-maintained/yt-dlp-android.git"
+        }
+    }
+}
+
+dependencies {
+    api("dev.ffmpegkit-maintained:yt-dlp-android:${VERSION}")
+}
