@@ -64,5 +64,5 @@ mavenPublishing {
 }
 
 dependencies {
-    api(project(':library'))
+    api("dev.ffmpegkit-maintained:yt-dlp-android:${VERSION}")
 }

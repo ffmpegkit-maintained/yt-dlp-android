@@ -33,16 +33,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p library/build/outputs/aar compat/build/outputs/aar
+          mkdir -p library/build/outputs/aar
           gh release download "${{ github.event.inputs.release_tag }}" \
             --repo "$GITHUB_REPOSITORY" \
             --pattern "yt-dlp-android-release.aar" \
             --output library/build/outputs/aar/yt-dlp-android-release.aar
-          gh release download "${{ github.event.inputs.release_tag }}" \
-            --repo "$GITHUB_REPOSITORY" \
-            --pattern "yt-dlp-android-compat-release.aar" \
-            --output compat/build/outputs/aar/yt-dlp-android-compat-release.aar
-          ls -lh library/build/outputs/aar/ compat/build/outputs/aar/
+          ls -lh library/build/outputs/aar/
 
       - name: Publish :library
         env:
@@ -73,6 +69,11 @@ jobs:
             --no-configuration-cache --no-daemon \
             -x :library:bundleReleaseAar
 
+      - name: Build :compat AAR from source
+        run: |
+          ./gradlew :compat:bundleReleaseAar \
+            --no-configuration-cache --no-daemon
+
       - name: Publish :compat
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
@@ -87,8 +88,7 @@ jobs:
             echo ":compat ${V} already on Maven Central — skipping"
           else
             ./gradlew :compat:publishAndReleaseToMavenCentral \
-              --no-configuration-cache --no-daemon \
-              -x :compat:bundleReleaseAar
+              --no-configuration-cache --no-daemon
           fi
 
       - name: Publish :alias-youtubedl
