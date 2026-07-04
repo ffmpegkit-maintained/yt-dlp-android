@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id 'com.android.library'
     id 'com.chaquo.python'
@@ -55,7 +57,7 @@ mavenPublishing {
     coordinates("dev.ffmpegkit-maintained", "yt-dlp-android", VERSION)
 
     signAllPublications()
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
     pom {
         name = "yt-dlp-android"
