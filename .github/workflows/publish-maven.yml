@@ -1,10 +1,10 @@
-name: Publish to Maven Central
+name: Publish all modules to Maven Central
 
 on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Tag de la release existante à publier (ex: v2.0.2)'
+        description: 'Tag de la release existante (ex: v2.0.2)'
         required: true
 
 jobs:
@@ -13,7 +13,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        # checkout main pour la config vanniktech — l'AAR est téléchargé séparément depuis le tag
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -21,44 +20,107 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Download existing AAR from GitHub Release
+      - name: Extract version
+        id: ver
+        run: |
+          TAG="${{ github.event.inputs.release_tag }}"
+          echo "v=${TAG#v}" >> $GITHUB_OUTPUT
+
+      - name: Download AARs from GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p library/build/outputs/aar
+          mkdir -p library/build/outputs/aar compat/build/outputs/aar
           gh release download "${{ github.event.inputs.release_tag }}" \
             --repo "$GITHUB_REPOSITORY" \
-            --pattern "*.aar" \
+            --pattern "yt-dlp-android-release.aar" \
             --output library/build/outputs/aar/yt-dlp-android-release.aar
-          echo "AAR downloaded:"
-          ls -lh library/build/outputs/aar/
+          gh release download "${{ github.event.inputs.release_tag }}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern "yt-dlp-android-compat-release.aar" \
+            --output compat/build/outputs/aar/yt-dlp-android-compat-release.aar
+          ls -lh library/build/outputs/aar/ compat/build/outputs/aar/
 
-      - name: Publish to Maven Central
-        run: |
-          VERSION="${{ github.event.inputs.release_tag }}"
-          VERSION="${VERSION#v}"
-          GROUP="dev.ffmpegkit-maintained"
-          ARTIFACT="yt-dlp-android"
-          POM_URL="https://repo1.maven.org/maven2/${GROUP//.//}/${ARTIFACT}/${VERSION}/${ARTIFACT}-${VERSION}.pom"
-          if curl -sf "$POM_URL" > /dev/null 2>&1; then
-            echo "Version ${VERSION} already on Maven Central — skipping."
-          else
-            chmod +x gradlew
-            ./gradlew :library:publishAndReleaseToMavenCentral \
-              --no-configuration-cache --no-daemon \
-              -x :library:bundleReleaseAar
-          fi
+      - name: Publish :library
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: "B30609B4"
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          V="${{ steps.ver.outputs.v }}"
+          POM="https://repo1.maven.org/maven2/dev/ffmpegkit-maintained/yt-dlp-android/${V}/yt-dlp-android-${V}.pom"
+          if curl -sf "$POM" > /dev/null 2>&1; then
+            echo ":library ${V} already on Maven Central — skipping"
+          else
+            chmod +x gradlew
+            ./gradlew :library:publishAndReleaseToMavenCentral \
+              --no-configuration-cache --no-daemon \
+              -x :library:bundleReleaseAar
+          fi
+
+      - name: Stage :library to MavenLocal (needed by :compat and :alias-* compilation)
+        env:
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: "B30609B4"
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          ./gradlew :library:publishToMavenLocal \
+            --no-configuration-cache --no-daemon \
+            -x :library:bundleReleaseAar
+
+      - name: Publish :compat
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: "B30609B4"
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          V="${{ steps.ver.outputs.v }}"
+          POM="https://repo1.maven.org/maven2/dev/ffmpegkit-maintained/yt-dlp-android-compat/${V}/yt-dlp-android-compat-${V}.pom"
+          if curl -sf "$POM" > /dev/null 2>&1; then
+            echo ":compat ${V} already on Maven Central — skipping"
+          else
+            ./gradlew :compat:publishAndReleaseToMavenCentral \
+              --no-configuration-cache --no-daemon \
+              -x :compat:bundleReleaseAar
+          fi
+
+      - name: Publish :alias-youtubedl
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: "B30609B4"
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          V="${{ steps.ver.outputs.v }}"
+          POM="https://repo1.maven.org/maven2/dev/ffmpegkit-maintained/youtubedl/${V}/youtubedl-${V}.pom"
+          if curl -sf "$POM" > /dev/null 2>&1; then
+            echo ":alias-youtubedl ${V} already on Maven Central — skipping"
+          else
+            ./gradlew :alias-youtubedl:publishAndReleaseToMavenCentral \
+              --no-configuration-cache --no-daemon
+          fi
+
+      - name: Publish :alias-ytdlp
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: "B30609B4"
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          V="${{ steps.ver.outputs.v }}"
+          POM="https://repo1.maven.org/maven2/dev/ffmpegkit-maintained/ytdlp/${V}/ytdlp-${V}.pom"
+          if curl -sf "$POM" > /dev/null 2>&1; then
+            echo ":alias-ytdlp ${V} already on Maven Central — skipping"
+          else
+            ./gradlew :alias-ytdlp:publishAndReleaseToMavenCentral \
+              --no-configuration-cache --no-daemon
+          fi

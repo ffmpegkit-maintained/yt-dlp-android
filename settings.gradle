@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
         maven { url 'https://chaquo.com/pypi-13.1/' }
     }
 }
