@@ -23,12 +23,16 @@ android {
         }
 
         python {
-            // Windows dev : Python 3.13 local explicite.
-            // JitPack : python-build-standalone extrait dans $HOME/python/bin.
-            // GitHub Actions CI : setup-python expose python3.13 dans le PATH.
-            def localPython   = new File("D:/Python313/python.exe")
+            // Local dev : set `python.executable=/path/to/python` in local.properties
+            //             (gitignored, machine-specific) or the LOCAL_PYTHON env var.
+            // JitPack : python-build-standalone extracted in $HOME/python/bin.
+            // GitHub Actions CI : setup-python exposes python3.13 on PATH.
+            def localProps = new Properties()
+            def lpFile = rootProject.file("local.properties")
+            if (lpFile.exists()) lpFile.withInputStream { localProps.load(it) }
+            def localPythonPath = localProps.getProperty("python.executable") ?: System.getenv("LOCAL_PYTHON")
             def jitpackPython = new File("${System.getProperty('user.home')}/python/bin/python3.13")
-            if      (localPython.exists())   { buildPython localPython.absolutePath }
+            if      (localPythonPath && new File(localPythonPath).exists()) { buildPython localPythonPath }
             else if (jitpackPython.exists()) { buildPython jitpackPython.absolutePath }
             else                             { buildPython "python3.13" }
             version "3.13"
@@ -74,10 +78,12 @@ mavenPublishing {
 
         developers {
             developer {
-                id = "ffmpegkit-maintained"
-                name = "ffmpegkit-maintained"
-                url = "https://github.com/ffmpegkit-maintained"
+                id = "jokobee"
+                name = "Jokobee"
                 email = "contact@jokobee.com"
+                url = "https://www.jokobee.com"
+                organization = "Jokobee"
+                organizationUrl = "https://www.jokobee.com"
             }
         }
 
