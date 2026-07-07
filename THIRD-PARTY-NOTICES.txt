@@ -1,0 +1,40 @@
+================================================================================
+THIRD-PARTY NOTICES — yt-dlp-android (Free)
+================================================================================
+Include this file in your application's "Open Source Licenses" or "About"
+screen, or bundle it as an asset accessible to the user.
+
+--------------------------------------------------------------------------------
+YT-DLP
+--------------------------------------------------------------------------------
+Copyright (c) 2021-2026 yt-dlp contributors.
+Licensed under the Unlicense (public domain dedication).
+Repository: https://github.com/yt-dlp/yt-dlp
+
+--------------------------------------------------------------------------------
+CHAQUOPY
+--------------------------------------------------------------------------------
+Copyright (c) 2017-2026 Chaquo Ltd.
+Licensed under the MIT License.
+Repository: https://github.com/chaquo/chaquopy
+
+--------------------------------------------------------------------------------
+PYTHON
+--------------------------------------------------------------------------------
+Copyright (c) 2001-2026 Python Software Foundation.
+Licensed under the PSF License (BSD-like, permissive).
+
+--------------------------------------------------------------------------------
+TERMS OF SERVICE NOTICE
+--------------------------------------------------------------------------------
+This library provides the technical capability to download media from
+internet services. The developer integrating this library is solely
+responsible for ensuring that their application's use complies with the
+Terms of Service of any third-party platform accessed, applicable
+copyright law, and any other relevant regulations.
+
+Jokobee provides the tool. Lawful use is your responsibility.
+
+--------------------------------------------------------------------------------
+Build scripts and packaging: copyright (c) 2026 Jokobee (www.jokobee.com)
+================================================================================
