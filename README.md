@@ -3,7 +3,7 @@
 An Android library that brings [yt-dlp](https://github.com/yt-dlp/yt-dlp) to Android with a clean Java API — supports [1000+ sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.ffmpegkit-maintained/yt-dlp-android)](https://central.sonatype.com/artifact/dev.ffmpegkit-maintained/yt-dlp-android)
-[![](https://jitpack.io/v/ffmpegkit-maintained/yt-dlp-android.svg)](https://jitpack.io/#ffmpegkit-maintained/yt-dlp-android)
+[![JitPack](https://jitpack.io/v/ffmpegkit-maintained/yt-dlp-android.svg)](https://jitpack.io/#ffmpegkit-maintained/yt-dlp-android)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Build](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml/badge.svg)](https://github.com/ffmpegkit-maintained/yt-dlp-android/actions/workflows/publish.yml)
 [![Website](https://img.shields.io/badge/website-jokobee.com-blue.svg)](https://www.jokobee.com/ytdlp)
